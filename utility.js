@@ -63,17 +63,11 @@ function clearStorageEveryNewDay(){
       }
       removeTimers();
       list = getSiteLists()
-      for(var i=0; i<list.length();i++){
+      for(var i=0; i<list.length;i++){
         siteName=list[i]
         var siteObj = getSiteObject(siteName)
         siteObj.total_delay=0
         setSiteObject(siteName,siteObj)
-        siteObj = getSiteObject(siteName)
-        tabs = siteObj.tabs
-        for(var tab=0; tab<list.length();tab++){
-          removeTabSiteMap(tab)
-          removeTabIdFromSiteObject(tab,siteName)
-        }
       }
     }
   }
