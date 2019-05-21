@@ -92,46 +92,48 @@ function reloadTab(siteObj){
 
 function validateTabs(siteObject){
   console.log(siteObject)
-  siteName = siteObject.name
-  tabs = siteObject.tabs
-  for (var i=0; i<tabs.length;i++){
-    try{
-      console.log("Checking for " + tabs[i])
-      chrome.tabs.get(tabs[i], function (tab){
-        if (chrome.extension.lastError){
-          var errorMsg = chrome.extension.lastError.message;
-          console.log(errorMsg)
-          tabId = parseInt(errorMsg.replace(/[^0-9]/g,''));
-          removeTabIdFromSiteObject(tabId,siteName)
-          removeTabSiteMap(tabId)
-        }
-        else{
-          if(tab){
-            console.log(tab)
-            console.log(siteName)
-            if(!tab.url.includes(siteName)){
-              removeTabIdFromSiteObject(tab.id,siteName)
-              removeTabSiteMap(tab.id)
+  if(siteObject){
+    siteName = siteObject.name
+    tabs = siteObject.tabs
+    for (var i=0; i<tabs.length;i++){
+      try{
+        console.log("Checking for " + tabs[i])
+        chrome.tabs.get(tabs[i], function (tab){
+          if (chrome.extension.lastError){
+            var errorMsg = chrome.extension.lastError.message;
+            console.log(errorMsg)
+            tabId = parseInt(errorMsg.replace(/[^0-9]/g,''));
+            removeTabIdFromSiteObject(tabId,siteName)
+            removeTabSiteMap(tabId)
+          }
+          else{
+            if(tab){
+              console.log(tab)
+              console.log(siteName)
+              if(!tab.url.includes(siteName)){
+                removeTabIdFromSiteObject(tab.id,siteName)
+                removeTabSiteMap(tab.id)
+              }
             }
           }
-        }
-      })
-    }catch(e){
-      console.log("error in getting tab information")
-    }
-  }
-  tabs = siteObject.tabs
-  try{
-    sitePattern = ["*://*."+ siteName +".com/*"]
-    chrome.tabs.query({url: sitePattern}, function(temp) {
-      for (var i=0; i<temp.length;i++){
-        if(!tabs.includes(temp[i].id)){
-          addTabIdFromSiteObject(temp[i].id,siteName)
-          setTabIdSite(temp[i].id,siteName)
-        }
+        })
+      }catch(e){
+        console.log("error in getting tab information")
       }
-    });
-  }catch(e){
-    console.log(e.message)
+    }
+    tabs = siteObject.tabs
+    try{
+      sitePattern = ["*://*."+ siteName +".com/*"]
+      chrome.tabs.query({url: sitePattern}, function(temp) {
+        for (var i=0; i<temp.length;i++){
+          if(!tabs.includes(temp[i].id)){
+            addTabIdFromSiteObject(temp[i].id,siteName)
+            setTabIdSite(temp[i].id,siteName)
+          }
+        }
+      });
+    }catch(e){
+      console.log(e.message)
+    }
   }
 }

@@ -81,6 +81,7 @@ function unBlock(siteName){
 
 function blockButtonRequest(siteName){
   siteObject = new site(siteName);
+  siteObject.name=siteName
   validateTabs(siteObject)
   siteObject.given_delay = getSiteOptions(siteName).given_delay
   console.log(siteObject.given_delay)
