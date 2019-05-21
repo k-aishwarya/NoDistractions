@@ -5,9 +5,16 @@ function startingTimer(siteName,siteObject,tabId){
     //   siteObject.tabs.push(tabId)
     console.log("Site Exists")
     siteObject=addTabIdFromSiteObject(tabId,siteName)
+
+    // if(siteObject.tabs.length==0){
+    //   validateTabs(siteObj)
+    // }
+ 
     siteObject.stopTimer()
     removeTimers(siteObject.timer)
     siteObject.startTimer();
+  
+
     saved = getSiteObject(siteName)
     if(saved){
       updateTimer(siteName,siteObject.timer)
@@ -20,7 +27,7 @@ function startingTimer(siteName,siteObject,tabId){
   else{
     console.log("Creating new site")
     siteObject = new site(siteName);
-    validateTabs(siteObject)
+      (siteObject)
     if(!siteObject.tabs.includes(tabId))
       siteObject.tabs.push(tabId)
     // siteObject.given_delay = blockedSites.get(siteName);
@@ -49,6 +56,7 @@ function completed(tabId, removeInfo){
     if(siteObj){
       if(siteObj.tabs.length==1){
         siteObj.stopTimer()
+        removeTimerForSiteObject(siteName)
       }
       siteObj = removeTabIdFromSiteObject(tabId,siteName)
       removeTabSiteMap(tabId)
@@ -71,14 +79,29 @@ function unBlock(siteName){
     removeSiteObject(siteName)
 }
 
+function blockButtonRequest(siteName){
+  siteObject = new site(siteName);
+  validateTabs(siteObject)
+  siteObject.given_delay = getSiteOptions(siteName).given_delay
+  console.log(siteObject.given_delay)
+  siteObject.total_delay=siteObject.getTotaldelay()
+  siteObject.startTimer();
+  
+  saved = getSiteObject(siteName)
+  if(saved){
+    updateTimer(siteName,siteObject.timer)
+    addTimers(siteObject.timer)
+  }
+  else{
+    setSiteObject(siteName,siteObject)
+  }
+}
+
 
 function onEveryRequest(details){
   console.log("everyRequest")
   console.log(details)
-  cleared = clearStorageEveryNewDay()
-  if(cleared){
-    return
-  }
+  clearStorageEveryNewDay()
   try{
     if(details.tabId==-1){
       throw "Invalid is tabId"

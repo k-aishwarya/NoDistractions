@@ -2,6 +2,9 @@
   "name": "NoDistraction",
   "description": "Productivity Booster. Spend limited time on distracting sites",
   "version": "0.0.0.1",
+  "icons": {
+    "16": "images/icon16.png"
+  },
   "browser_action": {
     "default_icon": {                   
       "16": "images/icon16.png"          

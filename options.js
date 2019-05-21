@@ -1,5 +1,3 @@
-// Saves options to chrome.storage
-
 function escapeRegExp(string){
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -22,6 +20,7 @@ function getSiteName(url){
 function callback(tabs) {
 
     var maxTime = document.getElementById('maxTimeAllowed').value;
+    maxTime = parseInt(maxTime)*60
     var currentTab = tabs[0]; 
     chrome.extension.getBackgroundPage().console.log(currentTab); 
     siteName = getSiteName(currentTab.url)
@@ -48,7 +47,7 @@ function callback(tabs) {
 
     chrome.extension.getBackgroundPage().console.log(sitePatterns)
 
-    reloadTab(siteName)
+    chrome.extension.getBackgroundPage().blockButtonRequest(siteName)
 }
 
 function reloadTab(siteName){
@@ -80,7 +79,59 @@ function unblock_options() {
     chrome.tabs.query(query, unblockCallback);
 }
 
+function toggle() {
+    var x = document.getElementById("myDIV");
+    chrome.extension.getBackgroundPage().console.log(x.style.display)
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+    blockedSites = chrome.extension.getBackgroundPage().getSiteLists()
+    var mainList = document.getElementById("navp");
+    mainList.innerHTML = '';
+
+    if(typeof blockedSites === 'undefined' || blockedSites==null){
+        var opt = document.createElement('option');
+        opt.value = "No Sites";
+        opt.innerHTML = "No Sites";
+        mainList.appendChild(opt); 
+    }
+    else{
+        for(var i=0;i<blockedSites.length;i++){        
+            var opt = document.createElement('option');
+            opt.value = blockedSites[i];
+            opt.innerHTML = blockedSites[i];
+            mainList.appendChild(opt);         
+        }
+    }
+    
+}
+
+function unblockSites(){
+    var mainList = document.getElementById("navp");
+    siteName = mainList.options[mainList.selectedIndex].value
+    chrome.extension.getBackgroundPage().console.log(siteName+" is unblocked")
+    chrome.extension.getBackgroundPage().console.log(chrome.extension.getBackgroundPage().getSiteLists(siteName))
+    chrome.extension.getBackgroundPage().removeSiteLists(siteName)
+    chrome.extension.getBackgroundPage().removeSitePattern(siteName)
+    chrome.extension.getBackgroundPage().removeSiteOptions(siteName)
+    chrome.extension.getBackgroundPage().unBlock(siteName)
+    alert(siteName + " is unblocked!!")
+    mainList.removeChild(mainList.options[mainList.selectedIndex]);
+    if(mainList.options.length==0){
+        var opt = document.createElement('option');
+        opt.value = "No Sites";
+        opt.innerHTML = "No Sites";
+        mainList.appendChild(opt); 
+    }
+}
   
 document.getElementById('block').addEventListener('click',block_options);
-
 document.getElementById('unblock').addEventListener('click',unblock_options);
+document.getElementById('toggle').addEventListener('click',toggle);
+document.getElementById('ub').addEventListener('click',unblockSites);
+
+var lists_pop_up = document.getElementById('myDIV')
+lists_pop_up.style.display = "none"
+

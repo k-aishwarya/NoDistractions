@@ -6,6 +6,17 @@ function getSiteNameFromDetails(details){
       return sitename
     }
   }
+  if(details.url){
+    blockedSites = getSiteLists()
+    if(blockedSites){
+      for (var i=0;i< blockedSites.length; i++){
+        if(details.url.includes(blockedSites[i])){
+          console.log(blockedSites[i])
+          return blockedSites[i];
+        }
+      }
+    }
+  }
   if(details.initiator){
     blockedSites = getSiteLists()
     if(blockedSites){
@@ -17,17 +28,6 @@ function getSiteNameFromDetails(details){
       }
     }
   }
-  // if(details.url){
-  //   blockedSites = getSiteLists()
-  //   if(blockedSites){
-  //     for (var i=0;i< blockedSites.length; i++){
-  //       if(details.url.includes(blockedSites[i])){
-  //         console.log(blockedSites[i])
-  //         return blockedSites[i];
-  //       }
-  //     }
-  //   }
-  // }
   return null;
 }
 
@@ -49,7 +49,10 @@ function getTodaysDate(){
 function clearStorageEveryNewDay(){
   currentDay = getTodaysDate()
   lastDate = getLastDate()
-  cleared = false
+  if(lastDate==null){
+    setLastdate(currentDay) 
+    lastDate = getLastDate()
+  }
   if(lastDate){
     if(lastDate!=currentDay){
       timers = getTimers()
@@ -58,12 +61,23 @@ function clearStorageEveryNewDay(){
           clearInterval(timers[i])
         }
       }
-      localStorage.clear()
-      cleared = true
+      removeTimers();
+      list = getSiteLists()
+      for(var i=0; i<list.length();i++){
+        siteName=list[i]
+        var siteObj = getSiteObject(siteName)
+        siteObj.total_delay=0
+        setSiteObject(siteName,siteObj)
+        siteObj = getSiteObject(siteName)
+        tabs = siteObj.tabs
+        for(var tab=0; tab<list.length();tab++){
+          removeTabSiteMap(tab)
+          removeTabIdFromSiteObject(tab,siteName)
+        }
+      }
     }
   }
   setLastdate(currentDay) 
-  return cleared
 }
 
 function reloadTab(siteObj){
@@ -77,21 +91,33 @@ function reloadTab(siteObj){
 }
 
 function validateTabs(siteObject){
+  console.log(siteObject)
   siteName = siteObject.name
   tabs = siteObject.tabs
   for (var i=0; i<tabs.length;i++){
     try{
+      console.log("Checking for " + tabs[i])
       chrome.tabs.get(tabs[i], function (tab){
-        if(!tab){
-          removeTabIdFromSiteObject(tabs[i],siteName)
-          chrome.browserAction.setIcon({
-            path : "images/icon16.png",
-            tabId : tabs[i]
-          });
+        if (chrome.extension.lastError){
+          var errorMsg = chrome.extension.lastError.message;
+          console.log(errorMsg)
+          tabId = parseInt(errorMsg.replace(/[^0-9]/g,''));
+          removeTabIdFromSiteObject(tabId,siteName)
+          removeTabSiteMap(tabId)
+        }
+        else{
+          if(tab){
+            console.log(tab)
+            console.log(siteName)
+            if(!tab.url.includes(siteName)){
+              removeTabIdFromSiteObject(tab.id,siteName)
+              removeTabSiteMap(tab.id)
+            }
+          }
         }
       })
     }catch(e){
-      console.log(e.message)
+      console.log("error in getting tab information")
     }
   }
   tabs = siteObject.tabs
@@ -100,12 +126,8 @@ function validateTabs(siteObject){
     chrome.tabs.query({url: sitePattern}, function(temp) {
       for (var i=0; i<temp.length;i++){
         if(!tabs.includes(temp[i].id)){
-          // console.log("####################"+temp[i].id+siteName)
           addTabIdFromSiteObject(temp[i].id,siteName)
-          chrome.browserAction.setIcon({
-            path : "images/icon24.png",
-            tabId : temp[i].id
-          });
+          setTabIdSite(temp[i].id,siteName)
         }
       }
     });

@@ -17,20 +17,21 @@ class site {
         var pattern = "*://*."+ this.name +".com/*";
         var name = this.name
         this.timer = setInterval(function() {
+            if(final-count==600){
+                alert("10 minutes left for "+name)
+            }
             count = count + 1
             this.total_delay = count
             console.log(count)
-            siteObj = getSiteObject(name)
-            if(siteObj.tabs.length==0){
-                validateTabs(siteObj)
-            }
+            validateTabs(siteObj)
+            siteObj=getSiteObject(name)
             siteObj.total_delay = count
             setSiteObject(name,siteObj)
             if(count>final){
                 var evt = new CustomEvent("BlockEvent", {detail: name});
                 window.dispatchEvent(evt);
             }
-        }, 60000);
+        }, 1000);
     }
 
     stopTimer(){

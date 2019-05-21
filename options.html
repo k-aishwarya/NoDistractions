@@ -1,22 +1,108 @@
 <!DOCTYPE html>
 <html>
 <head><title>No More Dists</title></head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style> 
+body {
+    background-color:  #D1DCCA
+}
+.dropbtn {
+  margin-left: 1.2em;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  /* min-width: 80px; */
+  box-shadow: 4px 4px 8px 4px rgba(0,0,0,0.2);
+  z-index: 1;
+  height: 75px;
+  width: 230px;
+  margin-top: 1em;
+  margin-left: 1em;
+  margin-bottom: 1em;
+  margin-right: 20em;
+}
+
+div.firstPopup {
+  height: 130px;
+  width: 250px;
+  /* background-color: #D1DCCA; */
+  margin-top: 0.001em;
+  margin-left: 0.001em;
+  margin-bottom: 0.001em;
+  margin-right: 0.001em;
+  padding-top: 3px;
+  padding-bottom: 6px;
+}
+
+.ex1 {
+  margin-top: 1em;
+  margin-left: 1em;
+  margin-bottom: 1em;
+  display: block;
+}
+.btn {
+  color: red;
+} 
+
+div.secondPopup {
+  width: 100%;
+  /* height: 50px; */
+  padding: 2px 0;
+  text-align: left;
+  background-color: lightblue;
+  margin-top: 20px;
+}
+
+.lst{
+  margin: 0; padding: 0;
+  /* margin-bottom: 20px; */
+}
+
+</style>
 <body>
 
-<p>
-    <div id="status"></div>   
-    <p>
-        <input type="text" id="maxTimeAllowed" value=60>minute(s)
-    </p>
-    <button id="block">Block this site?</button>
-    
+<p> 
+    <!-- <h2 align=center></h2> -->
+    <fieldset>
+        <legend>No Distraction</legend>
+                <div class="firstPopup">
+                        <p class="ex1">
+                                <input type="text" id="maxTimeAllowed" value=60 size="3">minute(s)
+                        </p>
+                        <p class="ex1">
+                                <button id="block" class="btn">Block this site</button>
+                        </p>
+
+                        <p class="ex1">
+                                <button id="unblock" >Unblock this site</button>
+                        </p>
+
+                        <p class="ex1">
+                          <button id="toggle" class="btn">Settings</button>
+                        </p>
+                </div>
+                
+
+                <div id="myDIV">
+                <p>Remove blocked sites</p>
+                <select align=left class="lst"  id="navp"></select>
+                <button id="ub" class="btn">Unblock</button>
+                </div>
+                
+    </fieldset>
                         
 </p>
 
-<p>
-    <button id="unblock">Unblock this site?</button>
-</p>
-
-<script src="options.js"></script>
+<script src="options.js">
+document.getElementById('unblock').style.display="block";
+</script>
 </body>
 </html>

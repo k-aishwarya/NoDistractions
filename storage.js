@@ -3,7 +3,8 @@ function addTimers(timerId){
     key="timers"
     timers = getTimers()
     if(timers){
-        timers.push(timerId)
+        if(!timers.includes(timerId))
+            timers.push(timerId)
     }
     else{
         timers=[timerId]
@@ -16,9 +17,11 @@ function removeTimers(timerId){
     key = "timers"
     timers = getTimers()
     if(timers){
-        if(timers.includes(timerId))
-            timers.pop(timerId)
-    }
+        var index = timers.indexOf(timerId);
+        if (index > -1) {
+            timers.splice(index, 1);
+        }
+    }   
     console.log("Removing timer=" + timerId +" for key=" +key)
     localStorage.setItem(key,JSON.stringify(timers))
 }
@@ -42,7 +45,10 @@ function getLastDate(){
     key = "lastDate"
     date=localStorage.getItem(key)
     console.log("Getting date=" + date + "for key=" +key)
-    return date
+    if(date)
+        return date
+    else 
+        return null
 }
 
 //SitesLists
@@ -61,20 +67,24 @@ function addBlockedSiteLists(siteName){
 
 function getSiteLists(){
     key="blockedSites"
-    siteLists=JSON.parse(localStorage.getItem(key))
+    siteLists=JSON.parse(localStorage.getItem(key))  
     console.log("Getting siteLists=" + siteLists + " for key=" +key)
     return siteLists
 }
 
 function removeSiteLists(siteName){
     key = "blockedSites"
-    sitePatterns = getSiteLists(key)
-    if(sitePatterns){
-        if(sitePatterns.includes(siteName))
-            sitePatterns.pop(siteName)
+    siteLists = getSiteLists(key)
+    console.log(siteLists)
+    if(siteLists){
+        var index = siteLists.indexOf(siteName);
+        if (index > -1) {
+            siteLists.splice(index, 1);
+        }
     }
+    console.log(siteLists)
     console.log("Removing siteName=" + siteName +" for key=" +key)
-    localStorage.setItem(key,JSON.stringify(sitePatterns))
+    localStorage.setItem(key,JSON.stringify(siteLists))
 }
 
 
@@ -107,8 +117,10 @@ function removeSitePattern(siteName){
     url = "*://*."+ siteName +".com/*";
     sitePatterns = getSitePatterns(key)
     if(sitePatterns){
-        if(sitePatterns.includes(url))
-            sitePatterns.pop(url)
+        var index = sitePatterns.indexOf(url);
+        if (index > -1) {
+            sitePatterns.splice(index, 1);
+        }
     }
     console.log("Removing sitePattern=" + url +" for key=" +key)
     localStorage.setItem(key,JSON.stringify(sitePatterns))
@@ -186,6 +198,18 @@ function updateTimer(siteName,timer){
     
 }
 
+function removeTimerForSiteObject(siteName){
+    saved = getSiteObject(siteName)
+    if(saved){
+      saved.timer = -1
+      console.log("Setting siteObject with timer =-1 for siteName=" +siteName + " obj=" + JSON.stringify(saved))
+      localStorage.setItem(siteName,JSON.stringify(saved))
+    }
+    else{
+        console.log("Getting NULL siteObject while setting Timer for siteName=" +siteName)
+    }
+}
+
 function getSiteObject(siteName){
     var result = JSON.parse(localStorage.getItem(siteName))
     if(result){   
@@ -204,7 +228,10 @@ function getSiteObject(siteName){
 function removeTabIdFromSiteObject(tabId,siteName){
     siteObj = getSiteObject(siteName)
     if(siteObj){
-        siteObj.tabs.pop(tabId)
+        var index = siteObj.tabs.indexOf(tabId);
+        if (index > -1) {
+            siteObj.tabs.splice(index, 1);
+        }
         console.log(siteObj.tabs)
         localStorage.setItem(siteName,JSON.stringify(siteObj))
         console.log("Removing tabId=" + tabId +" for siteName=" +siteName + " obj=" + JSON.stringify(siteObj))
