@@ -1,19 +1,12 @@
 function startingTimer(siteName,siteObject,tabId){
   if(siteObject){   
     validateTabs(siteObject)
-    // if(!siteObject.tabs.includes(tabId))
-    //   siteObject.tabs.push(tabId)
     console.log("Site Exists")
     siteObject=addTabIdFromSiteObject(tabId,siteName)
-
-    // if(siteObject.tabs.length==0){
-    //   validateTabs(siteObj)
-    // }
  
     siteObject.stopTimer()
     removeTimers(siteObject.timer)
     siteObject.startTimer();
-  
 
     saved = getSiteObject(siteName)
     if(saved){
@@ -30,7 +23,7 @@ function startingTimer(siteName,siteObject,tabId){
       (siteObject)
     if(!siteObject.tabs.includes(tabId))
       siteObject.tabs.push(tabId)
-    // siteObject.given_delay = blockedSites.get(siteName);
+      
     siteObject.given_delay = getSiteOptions(siteName).given_delay
     console.log(siteObject.given_delay)
     siteObject.total_delay=siteObject.getTotaldelay()

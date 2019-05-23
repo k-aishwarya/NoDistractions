@@ -106,7 +106,14 @@ function toggle() {
             mainList.appendChild(opt);         
         }
     }
-    
+    notifications = chrome.extension.getBackgroundPage().getNotifications()
+    if(typeof notifications === 'undefined' || notifications==null){
+    }
+    else{
+        for(var i=0;i<notifications.length;i++){        
+            document.getElementById(notifications[i].toString()).checked=true
+        }
+    }
 }
 
 function toggleTimer() {
@@ -179,6 +186,7 @@ function unblockSites(){
     }
 }
 
+
 function closeSites(){
     var mainList = document.getElementById("navp");
     siteName = mainList.options[mainList.selectedIndex].value
@@ -189,13 +197,39 @@ function closeSites(){
       }
     }); 
 }
+
+function addNotifications(){
+    chrome.extension.getBackgroundPage().removeNotifications()
+    if(document.getElementById("10").checked){
+        chrome.extension.getBackgroundPage().addNotifications(10)
+    }
+    if(document.getElementById("20").checked){
+        chrome.extension.getBackgroundPage().addNotifications(20)
+    }
+    if(document.getElementById("40").checked){
+        chrome.extension.getBackgroundPage().addNotifications(40)
+    }
+    if(document.getElementById("60").checked){
+        chrome.extension.getBackgroundPage().addNotifications(60)
+    }
+}
+
+function removeNotifications(){
+    chrome.extension.getBackgroundPage().console.log(chrome.extension.getBackgroundPage().getNotifications())
+    chrome.extension.getBackgroundPage().removeNotifications()
+    document.getElementById("10").checked=false
+    document.getElementById("20").checked=false
+    document.getElementById("40").checked=false
+    document.getElementById("60").checked=false
+}
   
 document.getElementById('block').addEventListener('click',block_options);
-// document.getElementById('unblock').addEventListener('click',unblock_options);
 document.getElementById('toggle').addEventListener('click',toggle);
 document.getElementById('toggleTimer').addEventListener('click',toggleTimer);
 document.getElementById('ub').addEventListener('click',unblockSites);
 document.getElementById('cl').addEventListener('click',closeSites);
+document.getElementById('add').addEventListener('click',addNotifications);
+document.getElementById('reset').addEventListener('click',removeNotifications);
 
 var lists_pop_up = document.getElementById('myDIV')
 lists_pop_up.style.display = "none"

@@ -17,10 +17,24 @@ class site {
         var pattern = "*://*."+ this.name +".com/*";
         var name = this.name
         this.timer = setInterval(function() {
-            if(final-count==600){
-                alert("10 minutes left for "+name)
-            }
             count = count + 1
+            notifications = getNotifications()
+            if(typeof notifications === 'undefined' || notifications==null){
+            }
+            else{
+                if(final-count==600 && getNotifications().includes(10)){
+                    alert("10 minutes left for "+name)
+                }
+                if(final-count==1200 && getNotifications().includes(20)){
+                    alert("20 minutes left for "+name)
+                }
+                if(final-count==2400 && getNotifications().includes(40)){
+                    alert("40 minutes left for "+name)
+                }
+                if(final-count==3600 && getNotifications().includes(60)){
+                    alert("60 minutes left for "+name)
+                }
+            }
             this.total_delay = count
             console.log(count)
             validateTabs(siteObj)

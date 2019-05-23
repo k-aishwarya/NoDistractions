@@ -1,3 +1,33 @@
+//Notifications
+function addNotifications(notif){
+    key="notifications"
+    notifications = getNotifications()
+    if(notifications){
+        if(!notifications.includes(notif))
+        notifications.push(notif)
+    }
+    else{
+        notifications=[notif]
+    }
+    console.log("Adding notification=" + notif +" for key=" +key )
+    localStorage.setItem(key,JSON.stringify(notifications))
+}
+
+function removeNotifications(){
+    key = "notifications" 
+    console.log("Removing notifications for key=" +key)
+    localStorage.removeItem(key)
+}
+
+function getNotifications(){
+    key="notifications"
+    notifications=JSON.parse(localStorage.getItem(key))
+    console.log("Getting notifications=" + notifications + " for key=" +key)
+    return notifications
+}
+
+
+
 //Timers
 function addTimers(timerId){
     key="timers"

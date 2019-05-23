@@ -63,11 +63,13 @@ function clearStorageEveryNewDay(){
       }
       removeTimers();
       list = getSiteLists()
-      for(var i=0; i<list.length;i++){
-        siteName=list[i]
-        var siteObj = getSiteObject(siteName)
-        siteObj.total_delay=0
-        setSiteObject(siteName,siteObj)
+      if(list){
+        for(var i=0; i<list.length;i++){
+          siteName=list[i]
+          var siteObj = getSiteObject(siteName)
+          siteObj.total_delay=0
+          setSiteObject(siteName,siteObj)
+        }
       }
     }
   }
@@ -97,6 +99,7 @@ function validateTabs(siteObject){
             var errorMsg = chrome.extension.lastError.message;
             console.log(errorMsg)
             tabId = parseInt(errorMsg.replace(/[^0-9]/g,''));
+            console.log(tabId)
             removeTabIdFromSiteObject(tabId,siteName)
             removeTabSiteMap(tabId)
           }

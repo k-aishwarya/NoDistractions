@@ -155,13 +155,28 @@ legend {
                 </div>
                 
                 <div id="myDIV" class="secondPopup">
-                <p class="ex1">  <b>Blocked sites</b> 
-                  <p class="ex1">
-                      <select align=left class="lst"  id="navp"></select>
-                      <button id="ub" class="button unblock">Unblock</button>|
-                      <button id="cl" class="button close">Close All Tabs</button>
-                  </p>           
-                </p>
+                    <p class="ex1">  <b>Blocked sites</b> 
+                        <p class="ex1">
+                            <select align=left class="lst"  id="navp"></select>
+                            <button id="ub" class="button unblock">Unblock</button>|
+                            <button id="cl" class="button close">Close All Tabs</button>
+                        </p>           
+                    </p>
+                    <hr>
+                    <p class="ex1">  <b>Add Notification alerts</b> 
+                      <form class="ex1" id="notif">
+                          <input type="checkbox" value="10" id="10"> 10
+                          <input type="checkbox" value="20" id="20"> 20
+                          <input type="checkbox" value="40" id="40"> 40
+                          <input type="checkbox" value="60" id="60"> 60 
+                      </form>
+                      <p class="ex1">
+                        <button class="button unblock" id="add">Add</button> |
+                        <button class="button close" id="reset">Reset</button> 
+                      </p>
+                      
+                    
+                    </p>
                 </div>
 
                 <div id="timer" class="secondPopup">
