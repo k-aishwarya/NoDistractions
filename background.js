@@ -7,7 +7,7 @@ function startingTimer(siteName,siteObject,tabId){
     siteObject.stopTimer()
     removeTimers(siteObject.timer)
     siteObject.startTimer();
-
+    addTimers(siteObject.timer)
     saved = getSiteObject(siteName)
     if(saved){
       updateTimer(siteName,siteObject.timer)
@@ -28,14 +28,14 @@ function startingTimer(siteName,siteObject,tabId){
     console.log(siteObject.given_delay)
     siteObject.total_delay=siteObject.getTotaldelay()
     siteObject.startTimer();
-    
+    addTimers(siteObject.timer)
     saved = getSiteObject(siteName)
-    if(saved){
+    if(typeof saved === 'undefined' || saved==null){
+      setSiteObject(siteName,siteObject)
+    }
+    else{    
       updateTimer(siteName,siteObject.timer)
       addTimers(siteObject.timer)
-    }
-    else{
-      setSiteObject(siteName,siteObject)
     }
     
   }
@@ -49,6 +49,7 @@ function completed(tabId, removeInfo){
     if(siteObj){
       if(siteObj.tabs.length==1){
         siteObj.stopTimer()
+        removeTimers(siteObj.timer)
         removeTimerForSiteObject(siteName)
       }
       siteObj = removeTabIdFromSiteObject(tabId,siteName)
@@ -80,14 +81,14 @@ function blockButtonRequest(siteName){
   console.log(siteObject.given_delay)
   siteObject.total_delay=siteObject.getTotaldelay()
   siteObject.startTimer();
-  
+  addTimers(siteObject.timer)
   saved = getSiteObject(siteName)
-  if(saved){
+  if(typeof saved === 'undefined' || saved==null){
+    setSiteObject(siteName,siteObject)
+  }
+  else{    
     updateTimer(siteName,siteObject.timer)
     addTimers(siteObject.timer)
-  }
-  else{
-    setSiteObject(siteName,siteObject)
   }
 }
 

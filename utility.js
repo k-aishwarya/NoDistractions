@@ -95,6 +95,7 @@ function validateTabs(siteObject){
       try{
         console.log("Checking for " + tabs[i])
         chrome.tabs.get(tabs[i], function (tab){
+          void chrome.runtime.lastError;
           if (chrome.extension.lastError){
             var errorMsg = chrome.extension.lastError.message;
             console.log(errorMsg)
