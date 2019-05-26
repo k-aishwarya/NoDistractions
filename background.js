@@ -74,6 +74,16 @@ function unBlock(siteName){
 }
 
 function blockButtonRequest(siteName){
+  if(chrome.webRequest.onBeforeRequest.hasListener(blockRequest))
+     chrome.webRequest.onBeforeRequest.removeListener(blockRequest);
+
+  if(chrome.webRequest.onBeforeRequest.hasListener(onEveryBlockedRequest))
+     chrome.webRequest.onBeforeRequest.removeListener(onEveryBlockedRequest);
+
+  sitePatterns = getSitePatterns()
+  chrome.webRequest.onBeforeRequest.addListener(blockRequest, {urls: sitePatterns}, ['blocking']);
+  chrome.webRequest.onBeforeRequest.addListener(onEveryBlockedRequest, {urls: sitePatterns}, ['blocking']);
+
   siteObject = new site(siteName);
   siteObject.name=siteName
   validateTabs(siteObject)
@@ -93,7 +103,7 @@ function blockButtonRequest(siteName){
 }
 
 
-function onEveryRequest(details){
+function onEveryBlockedRequest(details){
   console.log("everyRequest")
   console.log(details)
   clearStorageEveryNewDay()
@@ -135,15 +145,6 @@ function blockRequest(details) {
 }
 
 function updateFilters() {
-
-  if(chrome.webRequest.onBeforeRequest.hasListener(blockRequest))
-     chrome.webRequest.onBeforeRequest.removeListener(blockRequest);
-
-  sitePatterns = ["*://*.com/*"]
-  chrome.webRequest.onBeforeRequest.addListener(blockRequest, {urls: sitePatterns}, ['blocking']);
-
-  chrome.webRequest.onBeforeRequest.addListener(onEveryRequest, {urls: sitePatterns}, ['blocking']);
-
   chrome.tabs.onRemoved.addListener(completed);
 
   window.addEventListener("BlockEvent", function(evt) {
