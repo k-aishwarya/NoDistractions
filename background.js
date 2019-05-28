@@ -27,6 +27,7 @@ function startingTimer(siteName,siteObject,tabId){
     siteObject.given_delay = getSiteOptions(siteName).given_delay
     console.log(siteObject.given_delay)
     siteObject.total_delay=siteObject.getTotaldelay()
+    setSiteObject(siteName,siteObject)
     siteObject.startTimer();
     addTimers(siteObject.timer)
     saved = getSiteObject(siteName)

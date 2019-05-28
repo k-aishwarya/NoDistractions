@@ -146,9 +146,9 @@ function toggleTimer() {
     
                         var minutes = Math.floor(timeLeft / 60);
     
-                        // var seconds = timeLeft - minutes * 60;
+                        var seconds = timeLeft - minutes * 60;
                     }                  
-                    document.getElementById("demo").innerHTML = "<h3> "+ hours + " h "+ minutes + " m </h3>";
+                    document.getElementById("demo").innerHTML = "<h3> "+ hours + " h "+ minutes + " m " + seconds + " s</h3>";
                     if (timeShower.style.display == "none") {
                         clearInterval(x);
                         document.getElementById("demo").innerHTML = " Calculating...";

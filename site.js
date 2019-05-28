@@ -37,6 +37,7 @@ class site {
             }
             this.total_delay = count
             console.log(count)
+            siteObj=getSiteObject(name)
             validateTabs(siteObj)
             siteObj=getSiteObject(name)
             siteObj.total_delay = count
