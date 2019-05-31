@@ -140,6 +140,7 @@ function toggleTimer() {
                     timeLeft = parseInt(siteObj.given_delay) - parseInt(siteObj.total_delay)
                     var hours = 0;
                     var minutes = 0;
+                    var seconds = 0;
                     if(timeLeft>0){
                         var hours = Math.floor(timeLeft / 3600);
                         timeLeft = timeLeft - hours * 3600;
@@ -147,6 +148,7 @@ function toggleTimer() {
                         var minutes = Math.floor(timeLeft / 60);
     
                         var seconds = timeLeft - minutes * 60;
+                        
                     }                  
                     document.getElementById("demo").innerHTML = "<h3> "+ hours + " h "+ minutes + " m " + seconds + " s</h3>";
                     if (timeShower.style.display == "none") {
